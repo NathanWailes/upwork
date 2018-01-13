@@ -1,0 +1,29 @@
+[
+  {
+    "change": 4.41,
+    "cum_change": -36.72,
+    "date": "Thu, 24 Aug 2017 00:00:00 GMT",
+    "date_sec": "1503547200",
+    "name": "Bitcoin",
+    "price": 4334.68,
+    "symbol": "BTC"
+  },
+  {
+    "change": 0.85,
+    "cum_change": -35.87,
+    "date": "Fri, 25 Aug 2017 00:00:00 GMT",
+    "date_sec": "1503633600",
+    "name": "Bitcoin",
+    "price": 4371.6,
+    "symbol": "BTC"
+  },
+  {
+    "change": -0.44,
+    "cum_change": -36.309999999999995,
+    "date": "Sat, 26 Aug 2017 00:00:00 GMT",
+    "date_sec": "1503720000",
+    "name": "Bitcoin",
+    "price": 4352.4,
+    "symbol": "BTC"
+  },
+]

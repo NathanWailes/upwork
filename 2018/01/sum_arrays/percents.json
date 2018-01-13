@@ -1,0 +1,34 @@
+[
+  {
+    "percent": ".1",
+    "symbol": "BTC"
+  },
+  {
+    "percent": ".3",
+    "symbol": "ETH"
+  },
+  {
+    "percent": ".25",
+    "symbol": "BCH"
+  },
+  {
+    "percent": ".03",
+    "symbol": "XRP"
+  },
+  {
+    "percent": ".01",
+    "symbol": "LTC"
+  },
+  {
+    "percent": ".03",
+    "symbol": "MIOTA"
+  },
+  {
+    "percent": ".15",
+    "symbol": "DASH"
+  },
+  {
+    "percent": ".01",
+    "symbol": "XEM"
+  }
+]
