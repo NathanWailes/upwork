@@ -99,7 +99,7 @@ class ApiTestCase(unittest.TestCase):
         self.assertEquals(222222, data['longitude'])
 
     def test_delete(self):
-        result = self.app.get('/delete/2')
+        result = self.app.post('/delete/2')
         self.assertEqual(result.status_code, 200)
 
         result = self.app.get('/read/2')

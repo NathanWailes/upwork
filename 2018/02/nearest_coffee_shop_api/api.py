@@ -71,7 +71,7 @@ def update(id):
         return Response("{'message':'No record was found with that ID.'}", status=404, mimetype='application/json')
 
 
-@app.route('/delete/<int:id>')
+@app.route('/delete/<int:id>', methods=["POST"])
 def delete(id):
     try:
         del id_to_coffee_shop_data[id]
