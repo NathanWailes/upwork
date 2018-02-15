@@ -42,8 +42,7 @@ class Mixpanel(object):
 	
 		print request_url
 		
-		request = urllib.urlretrieve(request_url, output_filepath)
-
+		urllib.urlretrieve(request_url, output_filepath)
 
 	def unicode_urlencode(self, params):
 		"""
@@ -104,8 +103,8 @@ thisday=date.today()
 todate=str(thisday)
 
 api = Mixpanel(
-	api_key = api_key, 
-	api_secret = api_secret
+	api_key=api_key,
+	api_secret=api_secret
 )
 
 api.request(['export'], {
@@ -118,5 +117,3 @@ api.request(['export'], {
 	'to_date': todate
 	#'where': ''
 	}, output_filepath="hiring.out")
-	
-print data
