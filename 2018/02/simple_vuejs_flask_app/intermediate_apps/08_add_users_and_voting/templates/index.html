@@ -1,0 +1,127 @@
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <h1>Movie app</h1>
+
+    <h2>Predict the genre of a movie</h2>
+    <div>Predicted genre: {{ predictedGenre }}</div>
+    <form enctype="multipart/form-data">
+        <input type="file" name="file" v-on:change="fileChange($event.target.files)" />
+        <button type="button" v-on:click="uploadScript()">Upload script</button>
+    </form>
+
+    <hr>
+
+    <h2>Submit a movie</h2>
+    <p>{{ message }}</p>
+    <input v-model="movieTitle" />
+    <button @click="submitMovieTitle">Submit movie title</button>
+
+    <hr>
+
+    <template v-if="!userIsLoggedIn">
+    <h2>Log in or create an account to submit movie ratings</h2>
+    <form enctype="multipart/form-data" action="%% url_for('signin') %%" name="signinForm" id="signinForm" method="post">
+        %% form.csrf_token %%
+        <input type="text" name="email" />
+        <input type="password" name="password" />
+        <input type="submit" value="Sign in"/>
+    </form>
+
+    <hr>
+    </template>
+
+    <h2>View and submit movie ratings</h2>
+    <h1>Movies</h1>
+    <div id="movie-table">
+        <div id="movie-row" v-for="movie in movies">
+            <div class="movie-title">{{ movie['title'] }}</div>
+            <div class="average-rating">Average rating: {{ movie['averageRating'] !== -1 ? movie['averageRating'] : "No ratings" }} / 5</div>
+            <div class="user-rating">
+                Your rating:
+                <div class="vote-option" @click="submitRating(movie, 1)">1</div>
+                <div class="vote-option" @click="submitRating(movie, 2)">2</div>
+                <div class="vote-option" @click="submitRating(movie, 3)">3</div>
+                <div class="vote-option" @click="submitRating(movie, 4)">4</div>
+                <div class="vote-option" @click="submitRating(movie, 5)">5</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+new Vue({
+    el: '#app',
+    data: {
+        movies: %% all_movies|safe %%,
+        movieTitle: "",
+        message: "",
+        files: new FormData(),
+        predictedGenre: "",
+        userIsLoggedIn: {% if current_user.is_authenticated %}true{% else %}false{% endif %},
+        username: "",
+        password: ""
+    },
+    methods: {
+        submitMovieTitle: function() {
+            axios.post("%%url_for('add_movie')%%", {
+                movieTitle: this.movieTitle
+            })
+            .then(response => {
+                // JSON responses are automatically parsed.
+                this.message = response.data['message']
+                this.movies = response.data['movies']
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        },
+        fileChange: function(fileList) {
+            this.files.append("file", fileList[0], fileList[0].name);
+        },
+        uploadScript: function() {
+            var vm = this
+            axios({ method: "POST", "url": "%% url_for('upload_script') %%", "data": this.files }).then(result => {
+                vm.predictedGenre = result.data['genre']
+            }, error => {
+                console.error(error)
+            })
+        },
+        submitRating: function(movie, rating) {
+            var vm = this
+            axios({ method: "POST", "url": "%% url_for('submit_rating') %%", "data": {'movie': movie, 'rating': rating }}).then(result => {
+                selected_movie = vm.movies.filter(x=> x.title === movie.title)[0]
+                console.log(selected_movie)
+                selected_movie.averageRating = result.data['averageRating']
+            }, error => {
+                console.error(error)
+            })
+        },
+    }
+})
+</script>
+<style type="text/css">
+.movie-title {
+    display: inline-block;
+    width: 300px;
+    overflow: hidden;
+}
+.average-rating {
+    display: inline-block;
+    width: 200px;
+    overflow: hidden;
+}
+.user-rating {
+    display: inline-block;
+}
+.vote-option {
+    display: inline-block;
+
+}
+.vote-option:hover {
+    cursor: pointer;
+}
+</style>
+</body>

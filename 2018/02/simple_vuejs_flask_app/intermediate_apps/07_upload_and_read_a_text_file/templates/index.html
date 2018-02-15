@@ -1,0 +1,58 @@
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <div>Predicted genre: {{ predicted_genre }}</div>
+    <form enctype="multipart/form-data">
+        <input type="file" name="file" v-on:change="fileChange($event.target.files)" />
+        <button type="button" v-on:click="upload()">Upload script</button>
+    </form>
+    <hr>
+    <p>{{ message }}</p>
+    <input v-model="movieTitle" />
+    <button @click="sendPostRequest">Submit movie title</button>
+    <div id="movie-title-table">
+        {% for movie_title in all_movie_titles %}
+        <div class="movie-title">%% movie_title %%</div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+new Vue({
+    el: '#app',
+    data: {
+        movieTitle: "",
+        message: "",
+        files: new FormData(),
+        predicted_genre: ""
+    },
+    methods: {
+        sendPostRequest: function() {
+            axios.post("%%url_for('add_movie')%%", {
+              movieTitle: this.movieTitle
+            })
+            .then(response => {
+              // JSON responses are automatically parsed.
+              this.message = response.data['message']
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        },
+        fileChange: function(fileList) {
+            this.files.append("file", fileList[0], fileList[0].name);
+        },
+        upload: function() {
+            var vm = this
+            axios({ method: "POST", "url": "%% url_for('upload_script') %%", "data": this.files }).then(result => {
+                vm.predicted_genre = result.data['genre']
+            }, error => {
+                console.error(error)
+            })
+        }
+    }
+})
+</script>
+</body>

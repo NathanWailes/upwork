@@ -1,0 +1,34 @@
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <input v-model="movieTitle" />
+    <button @click="sendPostRequest">Send POST request</button>
+    <p>{{ message }}</p>
+</div>
+<script>
+new Vue({
+    el: '#app',
+    data: {
+        movieTitle: "",
+        message: ""
+    },
+    methods: {
+        sendPostRequest: function() {
+            axios.post("%%url_for('add_movie')%%", {
+              movieTitle: this.movieTitle
+            })
+            .then(response => {
+              // JSON responses are automatically parsed.
+              this.message = response.data['message']
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        }
+    }
+})
+</script>
+</body>
