@@ -56,4 +56,10 @@ supply 2 scripts one that queries, and the other that dumps full collection of r
 associated with those distinct_ids, then combine that events data and people data into a single file.
 
 # Important links
+- https://mixpanel.com/help/reference/exporting-raw-data
+    - This page contains the format of the "events" export that we need to use to get the list of distinct_ids (people) 
+    who have had an event in the past week.
+    - *This endpoint uses gzip to compress the transfer; as a result, raw exports should not be processed until the 
+    file is received in its entirety.*
+    - *Data returned from this endpoint is JSONL (newline-delimited JSON).*
 - https://mixpanel.com/help/reference/data-export-api
