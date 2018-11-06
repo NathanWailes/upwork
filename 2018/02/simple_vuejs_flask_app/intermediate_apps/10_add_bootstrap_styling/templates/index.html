@@ -1,0 +1,139 @@
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.core.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+</head>
+<body>
+<div id="app" class="container">
+    <h2>Predict the genre of a movie script</h2>
+    <form enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="fileToUpload">Script</label>
+            <input id="fileToUpload" class="form-control" type="file" name="file" v-on:change="fileChange($event.target.files)" />
+        </div>
+        <button type="button" class="btn btn-primary" v-on:click="uploadScript()">Upload script</button>
+    </form>
+
+    <template v-if="predictedGenre">
+    <hr>
+    <h3>Predicted genre</h3>
+    <div>{{ predictedGenre }}</div>
+    </template>
+
+    <hr>
+
+    <h2>Submit a movie</h2>
+    <p>{{ message }}</p>
+    <input v-model="movieTitle" />
+    <button @click="submitMovieTitle">Submit movie title</button>
+
+    <hr>
+
+    <template v-if="!userIsLoggedIn">
+    <h2>Log in or create an account to submit movie ratings</h2>
+    <form enctype="multipart/form-data" action="%% url_for('signin') %%" name="signinForm" id="signinForm" method="post">
+        %% form.csrf_token %%
+        <input type="text" name="email" />
+        <input type="password" name="password" />
+        <input type="submit" value="Sign in"/>
+    </form>
+
+    <hr>
+    </template>
+
+    <h2>View and submit movie ratings</h2>
+    <table id="movie-table" class="table">
+        <thead>
+            <tr>
+                <th scope="col">Movie title</th>
+                <th scope="col">Average Rating (1-5)</th>
+                <th scope="col">Choose your rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="movie-row" v-for="movie in sortedMovies">
+                <td>{{ movie['title'] }}</td>
+                <td>{{ movie['averageRating'] !== -1 ? movie['averageRating'] : "No ratings" }}</td>
+                <td><span class="vote-option" @click="submitRating(movie, 1)">1</span>
+                    <span class="vote-option" @click="submitRating(movie, 2)">2</span>
+                    <span class="vote-option" @click="submitRating(movie, 3)">3</span>
+                    <span class="vote-option" @click="submitRating(movie, 4)">4</span>
+                    <span class="vote-option" @click="submitRating(movie, 5)">5</span>
+                </td>span
+            </tr>
+        </tbody>
+    </table>span
+</div>
+<script>
+new Vue({
+    el: '#app',
+    data: {
+        movies: %% all_movies|safe %%,
+        movieTitle: "",
+        message: "",
+        files: new FormData(),
+        predictedGenre: "",
+        userIsLoggedIn: {% if current_user.is_authenticated %}true{% else %}false{% endif %},
+        username: "",
+        password: ""
+    },
+    computed: {
+        sortedMovies: function() {
+            return _.sortBy(this.movies, 'averageRating').reverse();
+        }
+    },
+    methods: {
+        submitMovieTitle: function() {
+            axios.post("%%url_for('add_movie')%%", {
+                movieTitle: this.movieTitle
+            })
+            .then(response => {
+                // JSON responses are automatically parsed.
+                this.message = response.data['message']
+                this.movies = response.data['movies']
+                this.movieTitle = ""
+            })
+            .catch(e => {
+              this.errors.push(e)
+            })
+        },
+        fileChange: function(fileList) {
+            this.files.append("file", fileList[0], fileList[0].name);
+        },
+        uploadScript: function() {
+            var vm = this
+            axios({ method: "POST", "url": "%% url_for('upload_script') %%", "data": this.files }).then(result => {
+                vm.predictedGenre = result.data['genre']
+                vm.files = new FormData()
+            }, error => {
+                console.error(error)
+            })
+        },
+        submitRating: function(movie, rating) {
+            var vm = this
+            axios({ method: "POST", "url": "%% url_for('submit_rating') %%", "data": {'movie': movie, 'rating': rating }}).then(result => {
+                selected_movie = vm.movies.filter(x=> x.title === movie.title)[0]
+                console.log(selected_movie)
+                selected_movie.averageRating = result.data['averageRating']
+            }, error => {
+                console.error(error)
+            })
+        },
+    }
+})
+</script>
+<style type="text/css">
+hr {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+.vote-option:hover {
+    cursor: pointer;
+}
+</style>
+</body>
