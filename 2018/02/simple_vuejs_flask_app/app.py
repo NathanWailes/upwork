@@ -148,7 +148,8 @@ def signin():
 @app.route("/scripts", methods=["POST"])
 def upload_script():
     file = request.files['file']
-    text_from_the_file = file.read().decode('utf-8')
+    text_from_the_file = file.read()
+    text_from_the_file = text_from_the_file.decode('utf-8')
     predicted_genre = get_predicted_genre_given_text_of_script(text_from_the_file)
 
     response_dict = {'genre': predicted_genre}
