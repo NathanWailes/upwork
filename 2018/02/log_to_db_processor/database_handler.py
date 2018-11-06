@@ -56,7 +56,6 @@ def create_database(path_to_database):
     with contextlib.closing(sqlite3.connect(path_to_database)) as con:  # <-- Auto-close the db connection
         with con as session:  # <-- Auto commit or roll back
             _create_table(session, sql_to_create_log_entries_table)
-            # _create_table(session, sql_to_create_log_levels_table)
 
 
 def _create_table(conn, create_table_sql):

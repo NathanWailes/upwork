@@ -63,7 +63,7 @@ order by total_time_taken desc;
 # Approach used in coding up the solution
 
 1. First, figure out how to parse the log into individual entries.
-2. Then, figure out how to parse each entry into its consitutient keys and values.
+2. Then, figure out how to parse each entry into its constituent keys and values.
 3. Finally, store the keys and values in a sqlite database.
 
 # Good-to-know
