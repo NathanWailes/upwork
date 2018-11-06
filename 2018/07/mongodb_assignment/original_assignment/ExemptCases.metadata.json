@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"ExemptDB.ExemptCases"},{"v":2,"unique":true,"key":{"Case_ID":1,"Court":1,"Opinion_Date":1},"name":"Case_ID-Court-Opinion_Date","ns":"ExemptDB.ExemptCases","default_language":"english"}],"uuid":"687e13d90b044b67a304f92ee69e8d5b"}
