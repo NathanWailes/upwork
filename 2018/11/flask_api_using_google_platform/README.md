@@ -54,14 +54,3 @@ The API stores the data in BigQuery, training logic will fetch it from there. Fi
 - Each training set will be a separate table within a single BigQuery dataset (you could think of
 it as the "training sets" dataset).
 - "Once processed we'll archive the [training] table to disk. So there won't be millions of tables"
-
-## Setup
-
-- Set the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to point to your Google API key `.json` file.
-
-### Docker
-
-1. Build the Docker image: `docker build -t pubsub-subscriber .`
-1. Run the image: `docker run -it -e GOOGLE_APPLICATION_CREDENTIALS_PLAINTEXT='<contents of credentials JSON with newlines removed>' pubsub-subscriber`
-    - Note the single-quotes surrounding the environment variable's value.
-    - The `-it` flag is to make the container's STDOUT show up in the Docker window you have open. 
