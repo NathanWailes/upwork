@@ -46,20 +46,12 @@ the API is indeed used to initiate a new ML training cycle. For this, a client d
 
 The API stores the data in BigQuery, training logic will fetch it from there. Firestore is used to create a log that a dataset with that dataId has been created for that user, and updated when training starts (which can be coupled to a cloud function, and trigger the actual training).
 
-## List of links sent to me by the client
-
-### Project links
-- [Firestore](https://console.cloud.google.com/firestore/data?project=logleap-223119)
-- [BigQuery table](https://console.cloud.google.com/bigquery?project=logleap-223119)
-- [API Documentation](https://logleap-training.docs.stoplight.io/)
-- [Dataset and OpenAI spec](https://leapstation-my.sharepoint.com/:f:/g/personal/steven_leapstation_eu/Eo-1jbk3jWxNhsVdTIEzS8gBtJcJHtcu3vEvvIFPi-QaGQ?e=QKVgag)
-
-### Reference links
+## Reference links
 - [Streaming data into BigQuery](https://cloud.google.com/bigquery/streaming-data-into-bigquery)
 
 ## Notes from Nathan
 
-- Each LeapStation dataset (training set) will be a separate table within a single BigQuery dataset (you could think of
+- Each training set will be a separate table within a single BigQuery dataset (you could think of
 it as the "training sets" dataset).
 - "Once processed we'll archive the [training] table to disk. So there won't be millions of tables"
 
@@ -69,7 +61,7 @@ it as the "training sets" dataset).
 
 ### Docker
 
-1. Build the Docker image: `docker build -t logleap-pubsub-subscriber .`
-1. Run the image: `docker run -it -e GOOGLE_APPLICATION_CREDENTIALS_PLAINTEXT='<contents of credentials JSON with newlines removed>' logleap-pubsub-subscriber`
+1. Build the Docker image: `docker build -t pubsub-subscriber .`
+1. Run the image: `docker run -it -e GOOGLE_APPLICATION_CREDENTIALS_PLAINTEXT='<contents of credentials JSON with newlines removed>' pubsub-subscriber`
     - Note the single-quotes surrounding the environment variable's value.
     - The `-it` flag is to make the container's STDOUT show up in the Docker window you have open. 

@@ -13,18 +13,18 @@ app = Flask(__name__)
 
 # Set up the Google BigQuery client
 bigquery_client = bigquery.Client()
-bigquery_dataset_id = 'LogLeapTraining'
+bigquery_dataset_id = 'XXXXXXXXXXXXXXXXX'
 bigquery_dataset_ref = bigquery_client.dataset(bigquery_dataset_id)
 bigquery_dataset = bigquery.Dataset(bigquery_dataset_ref)
 
 # Set up the BigQuery template table
-bigquery_template_table_id = 'LogLeapTrainingTemplate'
+bigquery_template_table_id = 'XXXXXXXXXXXXXXXXX'
 bigquery_template_table_ref = bigquery_client.dataset(bigquery_dataset_id).table(bigquery_template_table_id)
 bigquery_template_table = bigquery_client.get_table(bigquery_template_table_ref)
 
 # Set up the Google Pub/Sub client so we can use it for the /train/<training_set_id> route:
-project_id = "logleap-223119"
-topic_name = "logleap_train"
+project_id = "XXXXXXXXXXXXXXXXX"
+topic_name = "XXXXXXXXXXXXXXXXX"
 publisher = pubsub_v1.PublisherClient()
 topic_path = publisher.topic_path(project_id, topic_name)
 
@@ -34,7 +34,7 @@ firebase_admin.initialize_app(cred, {
   'projectId': project_id,
 })
 db = firestore.client()
-firestore_training_sets_metadata_collection = db.collection('LogLeapTraining')
+firestore_training_sets_metadata_collection = db.collection('XXXXXXXXXXXXXXXXX')
 
 
 def valid_training_set_id_required(view_function):
@@ -73,7 +73,7 @@ def create_training_set():
 
     # Code from https://firebase.google.com/docs/firestore/manage-data/add-data
     # TODO: Make sure this is storing the document to Firestore.
-    db.collection('LogLeapTraining').document(training_set_id).set(data)
+    db.collection('XXXXXXXXXXXXXXXXX').document(training_set_id).set(data)
 
     return Response(json.dumps({'status': 'OK',
                                 'dataId': training_set_id}),
