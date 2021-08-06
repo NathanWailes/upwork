@@ -118,3 +118,7 @@ venvp3/
 2020/09/compare_csvs/results/
 2020/08/receive_car_gps_data/config.ini
 2020/08/receive_car_gps_data/production_config.ini
+*.DS_Store
+venvp39/
+2020/12/spotify_api/**/*.csv
+2020/12/spotify_api/**/*.txt
